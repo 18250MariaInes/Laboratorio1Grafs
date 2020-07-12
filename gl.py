@@ -1,3 +1,10 @@
+"""
+Maria Ines Vasquez Figueroa
+18250
+Gráficas
+SR1 Points 
+Funciones
+"""
 import struct
 
 def char(c):
@@ -21,44 +28,62 @@ WHITE = color(255,255,255)
 
 class Render(object):
     def __init__(self, width, height, red, green, blue):
-        self.width = width
-        self.height = height
+        self.glInit(width, height, red, green, blue)
+
+    #Inicializa objetos internos
+    def glInit(self, width, height, red, green, blue):
+        #esto se establece ahora en la funcion glCreatWindow
+        """self.width = width
+        self.height = height"""
+        self.glCreateWindow(width, height)
         self.curr_color = WHITE
         self.curr_color_bg=BLACK
         self.glClearColor(red, green, blue)
         self.glClear()
-    
+
+    #inicializa framebuffer
+    def glCreateWindow(self, width, height):
+        self.width = width
+        self.height = height
+
+    #define area de dibujo
+    def glViewPort(self, x, y, width, height):
+        self.vportwidth = width
+        self.vportheight = height
+        self.vportx = x
+        self.vporty = y
+
+    #cambia el color con el que se llena el mapa de bits (fondo)
     def glClearColor(self, red, green, blue):
         nred=int(255*red)
         ngreen=int(255*green)
         nblue=int(255*blue)
         self.curr_color_bg = color(nred, ngreen, nblue)
 
+    #llena el mapa de bits de un solo color predeterminado antes
     def glClear(self):
         self.pixels = [ [ self.curr_color_bg for x in range(self.width)] for y in range(self.height) ]
-
     
-
-
-    
-
+    #dibuja el punto en relación al viewport
     def glVertex(self, x, y):
-        self.pixels[y][x] = self.curr_color
-
+        nx=int((x+1)*(self.vportwidth/2)+self.vportx)
+        ny=int((y+1)*(self.vportheight/2)+self.vporty)
+        self.pixels[ny][nx] = self.curr_color
+    
+    #cambia de color con el que se hará el punto con parametros de 0-1
     def glColor(self, red, green, blue):
         nred=int(255*red)
         ngreen=int(255*green)
         nblue=int(255*blue)
-        
-
         self.curr_color = color(nred, ngreen, nblue)
 
-    def glfinish(self, filename):
+    #escribe el archivo de dibujo
+    def glFinish(self, filename):
         archivo = open(filename, 'wb')
 
         # File header 14 bytes
-        #archivo.write(char('B'))
-        #archivo.write(char('M'))
+        #f.write(char('B'))
+        #f.write(char('M'))
 
         archivo.write(bytes('B'.encode('ascii')))
         archivo.write(bytes('M'.encode('ascii')))

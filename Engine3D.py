@@ -9,10 +9,11 @@ Main
 from gl import Render
 
 #valores con los que se inicializan la ventana y viewport
-posX = 480
-posY = 270
+
 width=1920
 height=1080
+posX = width/4
+posY = height/4
 #creacion de Window
 r = Render(width,height,0,0,0)
 
